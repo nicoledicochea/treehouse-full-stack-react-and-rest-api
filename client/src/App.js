@@ -9,9 +9,6 @@ import UserSignIn from "./components/UserSignIn";
 import UserSignOut from "./components/UserSignOut";
 import UserSignUp from "./components/UserSignUp";
 
-
-
-
 function App() {
   return (
     <>
@@ -25,6 +22,8 @@ function App() {
         <Route path="signup" element={<UserSignUp />}></Route>
         <Route path="signout" element={<UserSignOut />}></Route>
       </Routes>
+
+
     </>
   )
 }
