@@ -17,11 +17,11 @@ const UserSignUp = () => {
                     <input id="emailAddress" name="emailAddress" type="email" value="" />
                     <label for="password">Password</label>
                     <input id="password" name="password" type="password" value="" />
-                    <button className="button" type="submit">Sign Up</button><button className="button button-secondary" onclick="event.preventDefault(); location.href='index.html';"
+                    <button className="button" type="submit">Sign Up</button><button className="button button-secondary" onClick="event.preventDefault(); location.href='index.html';"
                     >
                         Cancel
-                        {/* CHANGE ONCLICK EVENT
-                        onclick="event.preventDefault(); location.href='index.html';"
+                        {/* CHANGE onClick EVENT
+                        onClick="event.preventDefault(); location.href='index.html';"
                         */}
                     </button>
                 </form>

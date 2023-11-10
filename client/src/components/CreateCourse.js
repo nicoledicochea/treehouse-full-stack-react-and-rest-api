@@ -33,7 +33,7 @@ const CreateCourse = () => {
                         <textarea id="materialsNeeded" name="materialsNeeded"></textarea>
                     </div>
                 </div>
-                <button class="button" type="submit">Create Course</button><button class="button button-secondary" onclick="event.preventDefault(); location.href='index.html';">Cancel</button>
+                <button class="button" type="submit">Create Course</button><button class="button button-secondary" onClick="event.preventDefault(); location.href='index.html';">Cancel</button>
             </form>
         </div>
     </main>

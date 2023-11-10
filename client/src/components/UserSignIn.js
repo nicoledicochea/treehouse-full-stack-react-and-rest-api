@@ -17,8 +17,8 @@ const UserSignIn = () => {
         </button>
         <button
           className="button button-secondary"
-        // UPDATE ONCLICK
-        //   onclick="event.preventDefault(); location.href='index.html';"
+        // UPDATE onClick
+        //   onClick="event.preventDefault(); location.href='index.html';"
         >
           Cancel
         </button>
