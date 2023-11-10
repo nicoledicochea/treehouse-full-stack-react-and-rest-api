@@ -9,14 +9,14 @@ const UserSignUp = () => {
                 <h2>Sign Up</h2>
                 
                 <form>
-                    <label for="firstName">First Name</label>
-                    <input id="firstName" name="firstName" type="text" value="" />
-                    <label for="lastName">Last Name</label>
-                    <input id="lastName" name="lastName" type="text" value="" />
-                    <label for="emailAddress">Email Address</label>
-                    <input id="emailAddress" name="emailAddress" type="email" value="" />
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" value="" />
+                    <label >First Name
+                    <input id="firstName" name="firstName" type="text" value="" /></label>
+                    <label>Last Name
+                    <input id="lastName" name="lastName" type="text" value="" /></label>
+                    <label>Email Address
+                    <input id="emailAddress" name="emailAddress" type="email" value="" /></label>
+                    <label>Password
+                    <input id="password" name="password" type="password" value="" /></label>
                     <button className="button" type="submit">Sign Up</button><button className="button button-secondary" onClick="event.preventDefault(); location.href='index.html';"
                     >
                         Cancel

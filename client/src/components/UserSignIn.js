@@ -8,10 +8,10 @@ const UserSignIn = () => {
       <h2>Sign In</h2>
 
       <form>
-        <label for="emailAddress">Email Address</label>
-        <input id="emailAddress" name="emailAddress" type="email" value="" />
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" value="" />
+        <label>Email Address
+        <input id="emailAddress" name="emailAddress" type="email" value="" /></label>
+        <label>Password
+        <input id="password" name="password" type="password" value="" /></label>
         <button className="button" type="submit">
           Sign In
         </button>
