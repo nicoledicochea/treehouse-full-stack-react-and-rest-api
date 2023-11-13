@@ -10,6 +10,8 @@ const UpdateCourse = () => {
   const [description, setDescription] = useState('')
   const [estimatedTime, setTime] = useState('')
   const [materialsNeeded, setMaterials] = useState('')
+  const [errors, setErrors] = useState([])
+  const [isValid, setIsValid] = useState(true)
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -65,11 +67,18 @@ const UpdateCourse = () => {
           password: "password"
         }
         })
+        .then(response => {
+          if(response.status === 204) {
+              navigate(`/courses/${id}`)
+          }
+      })
         // .then(response => console.log(response.status))
         .catch(error => {
-          console.log(`Error fetching and parsing data: ${error}`);
+          const validationErrors = error.response.data.errors
+          setErrors(validationErrors)
+          setIsValid(false)
         })
-        navigate(`/courses/${id}`)
+        // navigate(`/courses/${id}`)
     }
   }
 
@@ -77,6 +86,17 @@ const UpdateCourse = () => {
     <main>
       <div className="wrap">
         <h2>Update Course</h2>
+        <div className="validation--errors" hidden={isValid}>
+                <h3>Validation Errors</h3>
+                <ul>
+                    {/* {console.log(errors)} */}
+                    {errors.map((error, index) => {
+                        return <li key={index}>{error}</li>
+                    })}
+                    {/* <li>Please provide a value for "Title"</li>
+                    <li>Please provide a value for "Description"</li> */}
+                </ul>
+            </div>
         <form onClick={e => handleSubmit(e)}>
           <div className="main--flex">
             <div>
