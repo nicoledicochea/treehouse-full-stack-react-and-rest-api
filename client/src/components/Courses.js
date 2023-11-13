@@ -1,8 +1,22 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../reset.css"
 import "../global.css"
 
 const Courses = () => {
+    const [courses, setCourses] = useState(null)
+
+    try {
+        const url = "http://localhost:5000/api/courses";
+        const fetchOptions = {
+            method: "GET"
+        }
+        const response = fetch(url, fetchOptions)
+
+        console.log(response.json())
+    } catch (error) {
+        console.error(error)
+    }
     return (
         <main>
         <div className="wrap main--grid">
