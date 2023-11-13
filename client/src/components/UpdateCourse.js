@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../reset.css";
 import "../global.css";
@@ -36,8 +36,8 @@ const UpdateCourse = () => {
       });
   }, [url]);
 
-  const cancelUpdate = (event) => {
-    event.preventDefault()
+  const handleCancel = (e) => {
+    e.preventDefault()
     navigate(`/courses/${id}`)
   }
 
@@ -53,29 +53,31 @@ const UpdateCourse = () => {
     }
     // console.log(updatedCourse)
     const url = `http://localhost:5000/api/courses/${id}`;
-
-    axios({
-      method: "PUT",
-      url,
-      data: JSON.stringify(updatedCourse),
-      headers: {"Content-Type": "application/json"},
-      // TODO - update with basic auth
-      auth: {
-        username: "john23@smith.com",
-        password: "password"
-      }
-    })
-      .then(response => console.log(response.status))
-      .catch(error => {
-        console.log(`Error fetching and parsing data: ${error}`);
-      })
+    if(e.target.type === "submit") {
+      axios({
+        method: "PUT",
+        url,
+        data: JSON.stringify(updatedCourse),
+        headers: {"Content-Type": "application/json"},
+        // TODO - update with basic auth
+        auth: {
+          username: "john23@smith.com",
+          password: "password"
+        }
+        })
+        .then(response => console.log(response.status))
+        .catch(error => {
+          console.log(`Error fetching and parsing data: ${error}`);
+        })
+        navigate(`/courses/${id}`)
+    }
   }
 
   return (
     <main>
       <div className="wrap">
         <h2>Update Course</h2>
-        <form onClick={(e) => handleSubmit(e)}>
+        <form onClick={e => handleSubmit(e)}>
           <div className="main--flex">
             <div>
               <label>
@@ -129,7 +131,8 @@ const UpdateCourse = () => {
           </button>
           <button
             className="button button-secondary"
-            onClick={() => cancelUpdate}
+            onClick={e => handleCancel(e)}
+            type="button"
             // onClick="event.preventDefault(); location.href='index.html';"
           >
             Cancel

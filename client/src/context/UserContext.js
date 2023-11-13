@@ -25,7 +25,7 @@ export const UserProvider = (props) => {
         } else if(response.status === 401) {
             return null
         } else {
-            throw new Error
+            throw new Error()
         }
     }
 
