@@ -15,7 +15,7 @@ const CourseDetail = () => {
         .get(url)
         .then((response) => {
             setCourse(response.data)
-            console.log(response.data)
+            // console.log(response.data)
         })
         .catch((error) => {
             console.log(`Error fetching and parsing data: ${error}`)

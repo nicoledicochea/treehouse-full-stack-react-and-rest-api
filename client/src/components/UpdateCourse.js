@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../reset.css";
 import "../global.css";
@@ -6,26 +6,76 @@ import axios from "axios";
 
 const UpdateCourse = () => {
   const [course, setCourse] = useState([]);
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [estimatedTime, setTime] = useState('')
+  const [materialsNeeded, setMaterials] = useState('')
+  const navigate = useNavigate();
 
   const { id } = useParams();
   const url = `http://localhost:5000/api/courses/${id}`;
+
   useEffect(() => {
     axios
       .get(url)
       .then((response) => {
-        setCourse(response.data);
-        console.log(response.data);
+        const course = response.data
+        setCourse(course);
+        setTitle(course.title)
+        setDescription(course.description)
+        if (course.estimatedTime) {
+          setTime(course.estimatedTime)
+        }
+        if(course.materialsNeeded) {
+          setMaterials(course.materialsNeeded)
+        }
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(`Error fetching and parsing data: ${error}`);
       });
   }, [url]);
 
+  const cancelUpdate = (event) => {
+    event.preventDefault()
+    navigate(`/courses/${id}`)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const updatedCourse =  {
+      title,
+      description,
+      estimatedTime,
+      materialsNeeded,
+      id: +id,
+      userId: course.userId
+    }
+    // console.log(updatedCourse)
+    const url = `http://localhost:5000/api/courses/${id}`;
+
+    axios({
+      method: "PUT",
+      url,
+      data: JSON.stringify(updatedCourse),
+      headers: {"Content-Type": "application/json"},
+      // TODO - update with basic auth
+      auth: {
+        username: "john23@smith.com",
+        password: "password"
+      }
+    })
+      .then(response => console.log(response.status))
+      .catch(error => {
+        console.log(`Error fetching and parsing data: ${error}`);
+      })
+  }
+
   return (
     <main>
       <div className="wrap">
         <h2>Update Course</h2>
-        <form>
+        <form onClick={(e) => handleSubmit(e)}>
           <div className="main--flex">
             <div>
               <label>
@@ -34,7 +84,8 @@ const UpdateCourse = () => {
                   id="courseTitle"
                   name="courseTitle"
                   type="text"
-                  value={`${course.title}`}
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
                 />
               </label>
 
@@ -45,7 +96,8 @@ const UpdateCourse = () => {
                 <textarea
                   id="courseDescription"
                   name="courseDescription"
-                  value={`${course.description}`}
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
                 ></textarea>
               </label>
             </div>
@@ -56,19 +108,19 @@ const UpdateCourse = () => {
                   id="estimatedTime"
                   name="estimatedTime"
                   type="text"
-                  value={course.estimatedTime ? `${course.estimatedTime}` : ""}
+                  value={estimatedTime}
+                  onChange={e => setTime(e.target.value)}
                 />
               </label>
 
               <label>
                 Materials Needed
-                <textarea 
-                id="materialsNeeded" 
-                name="materialsNeeded"
-                value={course.materialsNeeded ? `${course.materialsNeeded}` : ""}
-                >
-                
-                </textarea>
+                <textarea
+                  id="materialsNeeded"
+                  name="materialsNeeded"
+                  value={materialsNeeded}
+                  onChange={e => setMaterials(e.target.value)}
+                ></textarea>
               </label>
             </div>
           </div>
@@ -77,7 +129,8 @@ const UpdateCourse = () => {
           </button>
           <button
             className="button button-secondary"
-            onClick="event.preventDefault(); location.href='index.html';"
+            onClick={() => cancelUpdate}
+            // onClick="event.preventDefault(); location.href='index.html';"
           >
             Cancel
           </button>
