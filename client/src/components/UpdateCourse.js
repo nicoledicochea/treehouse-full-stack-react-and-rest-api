@@ -65,7 +65,7 @@ const UpdateCourse = () => {
           password: "password"
         }
         })
-        .then(response => console.log(response.status))
+        // .then(response => console.log(response.status))
         .catch(error => {
           console.log(`Error fetching and parsing data: ${error}`);
         })

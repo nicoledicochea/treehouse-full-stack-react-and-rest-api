@@ -1,39 +1,105 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react"
 import "../reset.css"
 import "../global.css"
+import axios from "axios"
 
 const CreateCourse = () => {
+    const navigate = useNavigate();
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
+    const [estimatedTime, setTime] = useState('')
+    const [materialsNeeded, setMaterials] = useState('')
+    const [errors, setErrors] = useState([])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const url = `http://localhost:5000/api/courses/`;
+        setTitle(title)
+        setDescription(description)
+        setTime(estimatedTime)
+        setMaterials(materialsNeeded)
+        const newCourse = {
+            estimatedTime,
+            materialsNeeded,
+            // authUser id
+            userId: 1 
+        }
+        if(title !== '') {
+            newCourse.title = title
+        }
+        if(description !== '') {
+            newCourse.description = description
+        }
+        console.log(newCourse)
+        axios({
+            method: "POST",
+            url,
+            data: JSON.stringify(newCourse),
+            headers: {"Content-Type": "application/json"},
+            // TODO - update with basic auth
+            auth: {
+                username: "john23@smith.com",
+                password: "password"
+            }
+            })
+            .then(response => {
+                if(response.status === 201) {
+                    navigate(`/`)
+                }
+            })
+            .catch(error => {
+                const validationErrors = error.response.data.errors
+                setErrors(validationErrors)
+            })
+        
+    }
+
+    const handleCancel = (e) => {
+        e.preventDefault()
+        navigate("/")
+    }
+
+
     return (
         <main>
-        <div class="wrap">
+        <div className="wrap">
             <h2>Create Course</h2>
-            <div class="validation--errors">
+            <div className="validation--errors">
                 <h3>Validation Errors</h3>
                 <ul>
-                    <li>Please provide a value for "Title"</li>
-                    <li>Please provide a value for "Description"</li>
+                    {/* {console.log(errors)} */}
+                    {errors.map((error, index) => {
+                        return <li key={index}>{error}</li>
+                    })}
+                    {/* <li>Please provide a value for "Title"</li>
+                    <li>Please provide a value for "Description"</li> */}
                 </ul>
             </div>
-            <form>
-                <div class="main--flex">
+            <form onSubmit={e => handleSubmit(e)}>
+                <div className="main--flex">
                     <div>
-                        <label for="courseTitle">Course Title</label>
-                        <input id="courseTitle" name="courseTitle" type="text" value="" />
+                        <label>Course Title
+                        <input id="courseTitle" name="courseTitle" type="text" value={title}
+                        onChange={e => setTitle(e.target.value)} /></label>
 
+                        {/* auth user */}
                         <p>By Joe Smith</p>
 
-                        <label for="courseDescription">Course Description</label>
-                        <textarea id="courseDescription" name="courseDescription"></textarea>
+                        <label>Course Description
+                        <textarea id="courseDescription" name="courseDescription" 
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}></textarea></label>
                     </div>
                     <div>
-                        <label for="estimatedTime">Estimated Time</label>
-                        <input id="estimatedTime" name="estimatedTime" type="text" value="" />
+                        <label>Estimated Time
+                        <input id="estimatedTime" name="estimatedTime" type="text" value={estimatedTime} onChange={e => setTime(e.target.value)} /></label>
 
-                        <label for="materialsNeeded">Materials Needed</label>
-                        <textarea id="materialsNeeded" name="materialsNeeded"></textarea>
+                        <label>Materials Needed
+                        <textarea id="materialsNeeded" name="materialsNeeded" onChange={e => setMaterials(e.target.value)} value={materialsNeeded}> </textarea></label>
                     </div>
                 </div>
-                <button class="button" type="submit">Create Course</button><button class="button button-secondary" onClick="event.preventDefault(); location.href='index.html';">Cancel</button>
+                <button className="button" type="submit">Create Course</button><button className="button button-secondary" onClick={e => handleCancel(e)}>Cancel</button>
             </form>
         </div>
     </main>
