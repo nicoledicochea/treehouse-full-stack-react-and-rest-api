@@ -11,6 +11,7 @@ const CreateCourse = () => {
     const [estimatedTime, setTime] = useState('')
     const [materialsNeeded, setMaterials] = useState('')
     const [errors, setErrors] = useState([])
+    const [isValid, setIsValid] = useState(true)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -31,7 +32,7 @@ const CreateCourse = () => {
         if(description !== '') {
             newCourse.description = description
         }
-        console.log(newCourse)
+        // console.log(newCourse)
         axios({
             method: "POST",
             url,
@@ -49,6 +50,7 @@ const CreateCourse = () => {
                 }
             })
             .catch(error => {
+                setIsValid(false)
                 const validationErrors = error.response.data.errors
                 setErrors(validationErrors)
             })
@@ -65,7 +67,7 @@ const CreateCourse = () => {
         <main>
         <div className="wrap">
             <h2>Create Course</h2>
-            <div className="validation--errors">
+            <div className="validation--errors" hidden={isValid}>
                 <h3>Validation Errors</h3>
                 <ul>
                     {/* {console.log(errors)} */}
