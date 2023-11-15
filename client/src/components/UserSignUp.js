@@ -63,7 +63,7 @@ const UserSignUp = () => {
             })}
         </ul> 
         </div>
-        : null}
+        : null }
         <form onSubmit={(e) => handleSubmit(e)}>
           <label>
             First Name

@@ -26,7 +26,7 @@ const UserSignIn = () => {
         setErrors(["Sign in was unsuccessful"])
       }
     } catch (error) {
-      // const validationErrors = error.response.data.errors;
+      console.log(error)
       navigate("/error")
     }
   };
@@ -39,6 +39,16 @@ const UserSignIn = () => {
   return (
     <div className="form--centered">
       <h2>Sign In</h2>
+      { errors.length > 0 
+        ? 
+        <div className="validation--errors" >
+        <ul>
+            {errors.map((error, index) => {
+                return <li key={index}>{error}</li>
+            })}
+        </ul> 
+        </div>
+        : null }
       <form onSubmit={(e) => handleSubmit(e)}>
         <label>
           Email Address
