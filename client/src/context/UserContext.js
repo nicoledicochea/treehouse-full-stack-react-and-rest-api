@@ -7,7 +7,7 @@ export const UserProvider = (props) => {
 
     const signIn = async (credentials) => {
         const encodedCredentials = btoa(
-            `${credentials.email}:${credentials.password}`
+            `${credentials.username}:${credentials.password}`
         )
 
         const fetchOptions = {
@@ -18,10 +18,11 @@ export const UserProvider = (props) => {
         }
         const url = "http://localhost:5000/api/users"
         const response = await fetch(url, fetchOptions)
-
+        
         if(response.status === 200) {
             const user = await response.json()
             setAuthUser(user)
+            return user
         } else if(response.status === 401) {
             return null
         } else {
@@ -48,3 +49,6 @@ export const UserProvider = (props) => {
         
     )
 }
+
+export default UserContext;
+
