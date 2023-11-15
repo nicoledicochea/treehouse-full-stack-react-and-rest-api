@@ -9,6 +9,7 @@ import UserSignIn from "./components/UserSignIn";
 import UserSignOut from "./components/UserSignOut";
 import UserSignUp from "./components/UserSignUp";
 import NotFound from "./components/NotFound";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -16,8 +17,10 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Courses />}></Route>
-        <Route path="/courses/create" element={<CreateCourse />}></Route>
-        <Route path="/courses/:id/update" element={<UpdateCourse />}></Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/courses/create" element={<CreateCourse />}></Route>
+          <Route path="/courses/:id/update" element={<UpdateCourse />}></Route>
+        </Route>
         <Route path="/courses/:id" element={<CourseDetail />}></Route>
         <Route path="signin" element={<UserSignIn />}></Route>
         <Route path="signup" element={<UserSignUp />}></Route>

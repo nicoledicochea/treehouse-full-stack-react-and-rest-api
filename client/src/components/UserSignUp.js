@@ -57,11 +57,12 @@ const UserSignUp = () => {
         { errors.length > 0 
         ? 
         <div className="validation--errors" >
-        <ul>
-            {errors.map((error, index) => {
-                return <li key={index}>{error}</li>
-            })}
-        </ul> 
+          <h3>Validation Errors</h3>
+          <ul>
+              {errors.map((error, index) => {
+                  return <li key={index}>{error}</li>
+              })}
+          </ul> 
         </div>
         : null }
         <form onSubmit={(e) => handleSubmit(e)}>

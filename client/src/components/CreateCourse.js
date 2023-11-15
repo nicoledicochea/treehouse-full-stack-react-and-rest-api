@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react"
+import { useState, useContext } from "react"
+import UserContext from "../context/UserContext"
 import "../reset.css"
 import "../global.css"
 import axios from "axios"
@@ -11,7 +12,7 @@ const CreateCourse = () => {
     const [estimatedTime, setTime] = useState('')
     const [materialsNeeded, setMaterials] = useState('')
     const [errors, setErrors] = useState([])
-    const [isValid, setIsValid] = useState(true)
+    const { authUser } = useContext(UserContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -24,7 +25,7 @@ const CreateCourse = () => {
             estimatedTime,
             materialsNeeded,
             // authUser id
-            userId: 1 
+            userId: authUser.id
         }
         if(title !== '') {
             newCourse.title = title
@@ -32,25 +33,22 @@ const CreateCourse = () => {
         if(description !== '') {
             newCourse.description = description
         }
-        // console.log(newCourse)
         axios({
             method: "POST",
             url,
             data: JSON.stringify(newCourse),
-            headers: {"Content-Type": "application/json"},
             // TODO - update with basic auth
             auth: {
-                username: "john23@smith.com",
-                password: "password"
+                username: authUser.emailAddress,
+                password: authUser.password
             }
             })
             .then(response => {
                 if(response.status === 201) {
                     navigate(`/`)
-                }
+                } console.log(authUser)
             })
             .catch(error => {
-                setIsValid(false)
                 const validationErrors = error.response.data.errors
                 setErrors(validationErrors)
             })
@@ -67,17 +65,17 @@ const CreateCourse = () => {
         <main>
         <div className="wrap">
             <h2>Create Course</h2>
-            <div className="validation--errors" hidden={isValid}>
+            {/* { errors.length > 0 
+            ? 
+            <div className="validation--errors" >
                 <h3>Validation Errors</h3>
                 <ul>
-                    {/* {console.log(errors)} */}
                     {errors.map((error, index) => {
                         return <li key={index}>{error}</li>
                     })}
-                    {/* <li>Please provide a value for "Title"</li>
-                    <li>Please provide a value for "Description"</li> */}
-                </ul>
+                </ul> 
             </div>
+            : null } */}
             <form onSubmit={e => handleSubmit(e)}>
                 <div className="main--flex">
                     <div>
@@ -86,7 +84,8 @@ const CreateCourse = () => {
                         onChange={e => setTitle(e.target.value)} /></label>
 
                         {/* auth user */}
-                        <p>By Joe Smith</p>
+                        { authUser ?  <p>By {authUser.firstName + authUser.lastName}</p> : null }
+                       
 
                         <label>Course Description
                         <textarea id="courseDescription" name="courseDescription" 

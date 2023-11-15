@@ -15,19 +15,25 @@ const CourseDetail = () => {
         .get(url)
         .then((response) => {
             setCourse(response.data)
-            // console.log(response.data)
         })
         .catch((error) => {
             console.log(`Error fetching and parsing data: ${error}`)
         })
     }, [url])
 
+    const handleDelete = () => {
+        axios
+        .delete(url)
+        .then(response => console.log("Course successfully deleted"))
+        .catch(error => console.error(error))
+    }
+
     return (
         <main>
             <div className="actions--bar">
                 <div className="wrap">
                     <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-                    <Link className="button" to="#">Delete Course</Link>
+                    <Link onClick={handleDelete} className="button" to="/">Delete Course</Link>
                     <Link className="button button-secondary" to="/">Return to List</Link>
                 </div>
             </div>
