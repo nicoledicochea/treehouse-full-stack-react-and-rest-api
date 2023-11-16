@@ -11,7 +11,6 @@ const UpdateCourse = () => {
   const [estimatedTime, setTime] = useState('')
   const [materialsNeeded, setMaterials] = useState('')
   const [errors, setErrors] = useState([])
-  const [isValid, setIsValid] = useState(true)
   const navigate = useNavigate();
   const { authUser } = useContext(UserContext)
 
@@ -32,7 +31,6 @@ const UpdateCourse = () => {
         if(course.materialsNeeded) {
           setMaterials(course.materialsNeeded)
         }
-        // console.log(response.data);
         else if (course.user.id !== authUser.id) {
           navigate('/forbidden')
         }
@@ -57,7 +55,6 @@ const UpdateCourse = () => {
       id: +id,
       userId: course.userId
     }
-    // console.log(updatedCourse)
     const url = `http://localhost:5000/api/courses/${id}`;
     if(e.target.type === "submit") {
       axios({
@@ -76,11 +73,9 @@ const UpdateCourse = () => {
               navigate(`/courses/${id}`)
           } 
       })
-        // .then(response => console.log(response.status))
         .catch(error => {
           const validationErrors = error.response.data.errors
           setErrors(validationErrors)
-          setIsValid(false)
           if(!validationErrors && error.response.status === 500){
             navigate('/error')
           }
@@ -92,16 +87,6 @@ const UpdateCourse = () => {
     <main>
       <div className="wrap">
         <h2>Update Course</h2>
-        {/* <div className="validation--errors" hidden={isValid}>
-                <h3>Validation Errors</h3>
-                <ul>
-
-                    {errors.map((error, index) => {
-                        return <li key={index}>{error}</li>
-                    })}
-
-                </ul>
-            </div> */}
         { errors.length > 0 
         ? 
         <div className="validation--errors" >
@@ -169,7 +154,6 @@ const UpdateCourse = () => {
             className="button button-secondary"
             onClick={e => handleCancel(e)}
             type="button"
-            // onClick="event.preventDefault(); location.href='index.html';"
           >
             Cancel
           </button>

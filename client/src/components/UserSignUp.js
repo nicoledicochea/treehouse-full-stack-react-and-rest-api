@@ -120,9 +120,6 @@ const UserSignUp = () => {
             onClick={(e) => handleCancel(e)}
           >
             Cancel
-            {/* CHANGE onClick EVENT
-                        onClick="event.preventDefault(); location.href='index.html';"
-                        */}
           </button>
         </form>
         <p>

@@ -48,9 +48,6 @@ const CreateCourse = () => {
                 username: authUser.emailAddress,
                 password: authUser.password
             },
-            // headers: {
-            //     Authorization: `Basic ${authCredentials}`
-            // }
             })
             .then(response => {
                 if(response.status === 201) {
@@ -71,7 +68,6 @@ const CreateCourse = () => {
         e.preventDefault()
         navigate("/")
     }
-
 
     return (
         <main>
