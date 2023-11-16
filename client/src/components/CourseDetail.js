@@ -4,6 +4,7 @@ import "../reset.css"
 import "../global.css"
 import axios from "axios"
 import UserContext from "../context/UserContext";
+import Markdown from "react-markdown";
 
 const CourseDetail = () => {
     const [course, setCourse] = useState([])
@@ -51,7 +52,7 @@ const CourseDetail = () => {
                             <h4 className="course--name">{course.title}</h4>
                             <p>By {course.user ? course.user.firstName + " " + course.user.lastName : null}</p>
 
-                            {course.description}
+                            <Markdown>{course.description}</Markdown>
                         </div>
                         <div>
                             <h3 className="course--detail--title">Estimated Time</h3>
@@ -60,7 +61,7 @@ const CourseDetail = () => {
                             <h3 className="course--detail--title">Materials Needed</h3>
                             <ul className="course--detail--list">
                                 {/* <li>1/2 x 3/4 inch parting strip</li> */}
-                                {course.materialsNeeded}
+                                <Markdown>{course.materialsNeeded}</Markdown>
  
                             </ul>
                         </div>

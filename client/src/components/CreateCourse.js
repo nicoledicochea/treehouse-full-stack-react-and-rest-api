@@ -102,7 +102,7 @@ const CreateCourse = () => {
                         <input id="estimatedTime" name="estimatedTime" type="text" value={estimatedTime} onChange={e => setTime(e.target.value)} /></label>
 
                         <label>Materials Needed
-                        <textarea id="materialsNeeded" name="materialsNeeded" onChange={e => setMaterials(e.target.value)} value={materialsNeeded}> </textarea></label>
+                        <textarea id="materialsNeeded" name="materialsNeeded" onChange={e => setMaterials(e.target.value)} value={materialsNeeded}></textarea></label>
                     </div>
                 </div>
                 <button className="button" type="submit">Create Course</button><button className="button button-secondary" onClick={e => handleCancel(e)}>Cancel</button>
