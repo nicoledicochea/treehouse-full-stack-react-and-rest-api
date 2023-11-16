@@ -45,7 +45,7 @@ const CourseDetail = () => {
                         <div>
                             <h3 className="course--detail--title">Course</h3>
                             <h4 className="course--name">{course.title}</h4>
-                            <p>By Joe Smith {course.userId}</p>
+                            <p>By {course.user ? course.user.firstName + " " + course.user.lastName : null}</p>
 
                             {course.description}
                         </div>
