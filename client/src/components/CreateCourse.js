@@ -33,6 +33,11 @@ const CreateCourse = () => {
         if(description !== '') {
             newCourse.description = description
         }
+        try {
+            
+        } catch (error) {
+            
+        }
         axios({
             method: "POST",
             url,
@@ -54,8 +59,10 @@ const CreateCourse = () => {
             })
             .catch(error => {
                 const validationErrors = error.response.data.errors
-                console.log(error.response.data.message)
                 setErrors(validationErrors)
+                if(!validationErrors && error.response.status === 500){
+                    navigate('/error')
+                }
             })
         
     }

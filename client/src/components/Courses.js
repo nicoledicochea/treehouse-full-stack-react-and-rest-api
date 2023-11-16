@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../reset.css"
 import "../global.css"
 import axios from "axios"
 
 const Courses = () => {
     const [courses, setCourses] = useState([])
-
+    const navigate = useNavigate()
     // try {
     //     const url = "http://localhost:5000/api/courses";
     //     const fetchOptions = {
@@ -28,6 +28,9 @@ const Courses = () => {
             // console.log(response.data)
         })
         .catch((error) => {
+            if(error.response.status === 500){
+                navigate('/error')
+            }
             console.log(`Error fetching and parsing data: ${error}`)
         })
     }, [url])

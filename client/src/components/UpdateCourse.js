@@ -38,11 +38,6 @@ const UpdateCourse = () => {
         }
       })
       .catch((error) => {
-        if(error.response.status === 404) {
-          navigate('/notfound')
-        } else {
-          navigate('/error')
-        }
         console.log(`Error fetching and parsing data: ${error}`);
       });
   }, [url, navigate, authUser.id]);
@@ -72,12 +67,11 @@ const UpdateCourse = () => {
         headers: {"Content-Type": "application/json"},
         // TODO - update with basic auth
         auth: {
-          username: "john23@smith.com",
-          password: "password"
+          username: authUser.emailAddress,
+          password: authUser.password
         }
         })
         .then(response => {
-          console.log(response)
           if(response.status === 204) {
               navigate(`/courses/${id}`)
           } 
@@ -87,8 +81,10 @@ const UpdateCourse = () => {
           const validationErrors = error.response.data.errors
           setErrors(validationErrors)
           setIsValid(false)
+          if(!validationErrors && error.response.status === 500){
+            navigate('/error')
+          }
         })
-        // navigate(`/courses/${id}`)
     }
   }
 
@@ -96,17 +92,27 @@ const UpdateCourse = () => {
     <main>
       <div className="wrap">
         <h2>Update Course</h2>
-        <div className="validation--errors" hidden={isValid}>
+        {/* <div className="validation--errors" hidden={isValid}>
                 <h3>Validation Errors</h3>
                 <ul>
-                    {/* {console.log(errors)} */}
+
                     {errors.map((error, index) => {
                         return <li key={index}>{error}</li>
                     })}
-                    {/* <li>Please provide a value for "Title"</li>
-                    <li>Please provide a value for "Description"</li> */}
+
                 </ul>
-            </div>
+            </div> */}
+        { errors.length > 0 
+        ? 
+        <div className="validation--errors" >
+          <h3>Validation Errors</h3>
+          <ul>
+              {errors.map((error, index) => {
+                  return <li key={index}>{error}</li>
+              })}
+          </ul> 
+          </div>
+        : null }
         <form onClick={e => handleSubmit(e)}>
           <div className="main--flex">
             <div>

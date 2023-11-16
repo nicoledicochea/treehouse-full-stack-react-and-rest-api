@@ -43,8 +43,8 @@ const UserSignUp = () => {
     } catch (error) {
         const validationErrors = error.response.data.errors;
         setErrors(validationErrors)
-        if(!validationErrors) {
-            navigate('/error')
+        if(error.response.status === 500){
+          navigate('/error')
         }
     }
   };

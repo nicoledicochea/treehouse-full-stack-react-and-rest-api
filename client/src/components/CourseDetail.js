@@ -22,7 +22,7 @@ const CourseDetail = () => {
         .catch((error) => {
             if(error.response.status === 404) {
                 navigate('/notfound')
-            } else {
+            } else if(error.response.status === 500){
                 navigate('/error')
             }
             console.log(`Error fetching and parsing data: ${error}`)
@@ -39,7 +39,12 @@ const CourseDetail = () => {
             },
         })
         .then(response => console.log("Course successfully deleted"))
-        .catch(error => console.error(error))
+        .catch(error => {
+            if(error.response.status === 500){
+                navigate('/error')
+            }
+            console.error(error)
+        })
     }
 
     return (
