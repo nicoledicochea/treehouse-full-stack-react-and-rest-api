@@ -42,7 +42,7 @@ const CreateCourse = () => {
             // TODO - update with basic auth
             auth: {
                 username: authUser.emailAddress,
-                password: "password"
+                password: authUser.password
             },
             // headers: {
             //     Authorization: `Basic ${authCredentials}`

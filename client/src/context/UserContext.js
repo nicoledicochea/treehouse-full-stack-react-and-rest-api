@@ -29,6 +29,7 @@ export const UserProvider = (props) => {
         const response = await fetch(url, fetchOptions)
         if(response.status === 200) {
             const user = await response.json()
+            user.password = credentials.password;
             setAuthUser(user)
             // Cookies.set("authenticatedUser", JSON.stringify(user))
             return user
