@@ -1,11 +1,13 @@
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "../reset.css"
 import "../global.css"
 import axios from "axios"
+import UserContext from "../context/UserContext";
 
 const CourseDetail = () => {
     const [course, setCourse] = useState([])
+    const { authUser } = useContext(UserContext)
 
     const { id } = useParams();
 
@@ -32,8 +34,10 @@ const CourseDetail = () => {
         <main>
             <div className="actions--bar">
                 <div className="wrap">
-                    <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-                    <Link onClick={handleDelete} className="button" to="/">Delete Course</Link>
+                    {authUser && course.user && authUser.id == course.user.id ? <>
+                        <Link className="button" to={`/courses/${id}/update`}>Update Course</Link> 
+                        <Link onClick={handleDelete} className="button" to="/">Delete Course</Link>
+                    </> : null}
                     <Link className="button button-secondary" to="/">Return to List</Link>
                 </div>
             </div>

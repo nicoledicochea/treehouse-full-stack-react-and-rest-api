@@ -111,7 +111,7 @@ const UpdateCourse = () => {
                 />
               </label>
 
-              <p>By Joe Smith {course.userId}</p>
+              <p>By {course.user ? course.user.firstName + " " + course.user.lastName : null}</p>
 
               <label>
                 Course Description

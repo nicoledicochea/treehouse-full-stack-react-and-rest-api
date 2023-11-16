@@ -33,7 +33,6 @@ const CreateCourse = () => {
         if(description !== '') {
             newCourse.description = description
         }
-        console.log(newCourse)
         axios({
             method: "POST",
             url,
