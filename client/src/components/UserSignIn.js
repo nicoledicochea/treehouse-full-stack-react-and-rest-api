@@ -14,47 +14,50 @@ const UserSignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let from = "/"
-    if(location.state) {
-      from = location.state.from
+    // use from and location.state to aid in redirect (line 30)
+    let from = "/";
+    if (location.state) {
+      from = location.state.from;
     }
+    // set credentials using user input
     const credentials = {
       username: username.current.value,
       password: password.current.value,
     };
     try {
+      // use signIn action
       const user = await actions.signIn(credentials);
-      if(user) {
-        navigate(from)
+      if (user) {
+        // redirect user to page they navigated from prior to signing in
+        navigate(from);
       } else {
-        setErrors(["Sign in was unsuccessful"])
+        setErrors(["Sign in was unsuccessful"]);
       }
     } catch (error) {
-      if(error.response.status === 500){
-        navigate('/error')
+      if (error.response.status === 500) {
+        navigate("/error");
       }
     }
   };
 
   const handleCancel = (e) => {
     e.preventDefault();
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <div className="form--centered">
       <h2>Sign In</h2>
-      { errors.length > 0 
-        ? 
-        <div className="validation--errors" >
+      {errors.length > 0 ? (
+        <div className="validation--errors">
           <h3>Validation Errors</h3>
           <ul>
-              {errors.map((error, index) => {
-                  return <li key={index}>{error}</li>
-              })}
-          </ul> 
-          </div>
-        : null }
+            {errors.map((error, index) => {
+              return <li key={index}>{error}</li>;
+            })}
+          </ul>
+        </div>
+      ) : null}
       <form onSubmit={(e) => handleSubmit(e)}>
         <label>
           Email Address

@@ -14,7 +14,7 @@ const CreateCourse = () => {
     const [errors, setErrors] = useState([])
     const { authUser } = useContext(UserContext)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const url = `http://localhost:5000/api/courses/`;
         setTitle(title)
@@ -33,17 +33,12 @@ const CreateCourse = () => {
         if(description !== '') {
             newCourse.description = description
         }
-        try {
-            
-        } catch (error) {
-            
-        }
-        axios({
+        await axios({
             method: "POST",
             url,
             data: JSON.stringify(newCourse),
             headers: {"Content-Type": "application/json"},
-            // TODO - update with basic auth
+            // basic auth
             auth: {
                 username: authUser.emailAddress,
                 password: authUser.password

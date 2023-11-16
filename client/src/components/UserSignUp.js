@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState, useContext } from "react";
 import axios from "axios";
-import UserContext from "../context/UserContext"
+import UserContext from "../context/UserContext";
 import "../reset.css";
 import "../global.css";
 
@@ -15,37 +15,39 @@ const UserSignUp = () => {
   const { actions } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    // create user using user input
     const user = {
-        firstName: firstName.current.value,
-        lastName: lastName.current.value,
-        emailAddress: emailAddress.current.value,
-        password: password.current.value
-    }
-    const url = "http://localhost:5000/api/users"
+      firstName: firstName.current.value,
+      lastName: lastName.current.value,
+      emailAddress: emailAddress.current.value,
+      password: password.current.value,
+    };
+    const url = "http://localhost:5000/api/users";
     try {
-        await axios({
-            method: "POST",
-            url,
-            data: JSON.stringify(user),
-            headers: {"Content-Type": "application/json"},
-        })
-        .then(async(response) => {
-            if(response.status === 201) {
-              const credentials = {
-                username: user.emailAddress,
-                password: user.password,
-              };
-                await actions.signIn(credentials)
-                navigate('/')
-            } 
-        })
-    } catch (error) {
-        const validationErrors = error.response.data.errors;
-        setErrors(validationErrors)
-        if(error.response.status === 500){
-          navigate('/error')
+      // send POST user request
+      await axios({
+        method: "POST",
+        url,
+        data: JSON.stringify(user),
+        headers: { "Content-Type": "application/json" },
+      }).then(async (response) => {
+        if (response.status === 201) {
+          const credentials = {
+            username: user.emailAddress,
+            password: user.password,
+          };
+          // use signIn action
+          await actions.signIn(credentials);
+          navigate("/");
         }
+      });
+    } catch (error) {
+      const validationErrors = error.response.data.errors;
+      setErrors(validationErrors);
+      if (error.response.status === 500) {
+        navigate("/error");
+      }
     }
   };
 
@@ -58,17 +60,16 @@ const UserSignUp = () => {
     <main>
       <div className="form--centered">
         <h2>Sign Up</h2>
-        { errors.length > 0 
-        ? 
-        <div className="validation--errors" >
-          <h3>Validation Errors</h3>
-          <ul>
+        {errors.length > 0 ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
               {errors.map((error, index) => {
-                  return <li key={index}>{error}</li>
+                return <li key={index}>{error}</li>;
               })}
-          </ul> 
-        </div>
-        : null }
+            </ul>
+          </div>
+        ) : null}
         <form onSubmit={(e) => handleSubmit(e)}>
           <label>
             First Name
@@ -82,12 +83,12 @@ const UserSignUp = () => {
           </label>
           <label>
             Last Name
-            <input 
-                id="lastName" 
-                name="lastName" 
-                type="text" 
-                ref={lastName} 
-                placeholder="Last Name"
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              ref={lastName}
+              placeholder="Last Name"
             />
           </label>
           <label>

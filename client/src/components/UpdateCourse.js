@@ -6,33 +6,36 @@ import UserContext from "../context/UserContext";
 
 const UpdateCourse = () => {
   const [course, setCourse] = useState([]);
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [estimatedTime, setTime] = useState('')
-  const [materialsNeeded, setMaterials] = useState('')
-  const [errors, setErrors] = useState([])
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [estimatedTime, setTime] = useState("");
+  const [materialsNeeded, setMaterials] = useState("");
+  const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
-  const { authUser } = useContext(UserContext)
+  const { authUser } = useContext(UserContext);
 
+  // get course id from route
   const { id } = useParams();
   const url = `http://localhost:5000/api/courses/${id}`;
-
+  // load specific course data
   useEffect(() => {
     axios
       .get(url)
       .then((response) => {
-        const course = response.data
+        const course = response.data;
         setCourse(course);
-        setTitle(course.title)
-        setDescription(course.description)
+        setTitle(course.title);
+        setDescription(course.description);
         if (course.estimatedTime) {
-          setTime(course.estimatedTime)
+          setTime(course.estimatedTime);
         }
-        if(course.materialsNeeded) {
-          setMaterials(course.materialsNeeded)
+        if (course.materialsNeeded) {
+          setMaterials(course.materialsNeeded);
         }
+        // only allow the authUser that created the course to update it
+        // redirects other authorized users to forbidden
         else if (course.user.id !== authUser.id) {
-          navigate('/forbidden')
+          navigate("/forbidden");
         }
       })
       .catch((error) => {
@@ -41,64 +44,64 @@ const UpdateCourse = () => {
   }, [url, navigate, authUser.id]);
 
   const handleCancel = (e) => {
-    e.preventDefault()
-    navigate(`/courses/${id}`)
-  }
+    e.preventDefault();
+    navigate(`/courses/${id}`);
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const updatedCourse =  {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // create the updated course body using the form submission
+    const updatedCourse = {
       title,
       description,
       estimatedTime,
       materialsNeeded,
       id: +id,
-      userId: course.userId
-    }
+      userId: course.userId,
+    };
     const url = `http://localhost:5000/api/courses/${id}`;
-    if(e.target.type === "submit") {
-      axios({
+    if (e.target.type === "submit") {
+      await axios({
         method: "PUT",
         url,
         data: JSON.stringify(updatedCourse),
-        headers: {"Content-Type": "application/json"},
-        // TODO - update with basic auth
+        headers: { "Content-Type": "application/json" },
+        // basic auth
         auth: {
           username: authUser.emailAddress,
-          password: authUser.password
-        }
-        })
-        .then(response => {
-          if(response.status === 204) {
-              navigate(`/courses/${id}`)
-          } 
+          password: authUser.password,
+        },
       })
-        .catch(error => {
-          const validationErrors = error.response.data.errors
-          setErrors(validationErrors)
-          if(!validationErrors && error.response.status === 500){
-            navigate('/error')
+        .then((response) => {
+          if (response.status === 204) {
+            navigate(`/courses/${id}`);
           }
         })
+        .catch((error) => {
+          const validationErrors = error.response.data.errors;
+          setErrors(validationErrors);
+          if (!validationErrors && error.response.status === 500) {
+            navigate("/error");
+          }
+        });
     }
-  }
+  };
 
   return (
     <main>
       <div className="wrap">
         <h2>Update Course</h2>
-        { errors.length > 0 
-        ? 
-        <div className="validation--errors" >
-          <h3>Validation Errors</h3>
-          <ul>
+        {errors.length > 0 ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
               {errors.map((error, index) => {
-                  return <li key={index}>{error}</li>
+                return <li key={index}>{error}</li>;
               })}
-          </ul> 
+            </ul>
           </div>
-        : null }
-        <form onClick={e => handleSubmit(e)}>
+        ) : null}
+        <form onClick={(e) => handleSubmit(e)}>
           <div className="main--flex">
             <div>
               <label>
@@ -108,11 +111,16 @@ const UpdateCourse = () => {
                   name="courseTitle"
                   type="text"
                   value={title}
-                  onChange={e => setTitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </label>
 
-              <p>By {course.user ? course.user.firstName + " " + course.user.lastName : null}</p>
+              <p>
+                By{" "}
+                {course.user
+                  ? course.user.firstName + " " + course.user.lastName
+                  : null}
+              </p>
 
               <label>
                 Course Description
@@ -120,7 +128,7 @@ const UpdateCourse = () => {
                   id="courseDescription"
                   name="courseDescription"
                   value={description}
-                  onChange={e => setDescription(e.target.value)}
+                  onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </label>
             </div>
@@ -132,7 +140,7 @@ const UpdateCourse = () => {
                   name="estimatedTime"
                   type="text"
                   value={estimatedTime}
-                  onChange={e => setTime(e.target.value)}
+                  onChange={(e) => setTime(e.target.value)}
                 />
               </label>
 
@@ -142,7 +150,7 @@ const UpdateCourse = () => {
                   id="materialsNeeded"
                   name="materialsNeeded"
                   value={materialsNeeded}
-                  onChange={e => setMaterials(e.target.value)}
+                  onChange={(e) => setMaterials(e.target.value)}
                 ></textarea>
               </label>
             </div>
@@ -152,7 +160,7 @@ const UpdateCourse = () => {
           </button>
           <button
             className="button button-secondary"
-            onClick={e => handleCancel(e)}
+            onClick={(e) => handleCancel(e)}
             type="button"
           >
             Cancel
