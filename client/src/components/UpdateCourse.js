@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import "../reset.css";
+import { useState, useEffect, useContext } from "react";
 import "../global.css";
 import axios from "axios";
+import UserContext from "../context/UserContext";
 
 const UpdateCourse = () => {
   const [course, setCourse] = useState([]);
@@ -13,6 +13,7 @@ const UpdateCourse = () => {
   const [errors, setErrors] = useState([])
   const [isValid, setIsValid] = useState(true)
   const navigate = useNavigate();
+  const { authUser } = useContext(UserContext)
 
   const { id } = useParams();
   const url = `http://localhost:5000/api/courses/${id}`;
@@ -32,11 +33,19 @@ const UpdateCourse = () => {
           setMaterials(course.materialsNeeded)
         }
         // console.log(response.data);
+        else if (course.user.id !== authUser.id) {
+          navigate('/forbidden')
+        }
       })
       .catch((error) => {
+        if(error.response.status === 404) {
+          navigate('/notfound')
+        } else {
+          navigate('/error')
+        }
         console.log(`Error fetching and parsing data: ${error}`);
       });
-  }, [url]);
+  }, [url, navigate, authUser.id]);
 
   const handleCancel = (e) => {
     e.preventDefault()
@@ -68,9 +77,10 @@ const UpdateCourse = () => {
         }
         })
         .then(response => {
+          console.log(response)
           if(response.status === 204) {
               navigate(`/courses/${id}`)
-          }
+          } 
       })
         // .then(response => console.log(response.status))
         .catch(error => {

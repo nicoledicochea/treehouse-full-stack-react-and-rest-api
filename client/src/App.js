@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Link, NavLink } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import CourseDetail from "./components/CourseDetail";
 import Courses from "./components/Courses";
 import CreateCourse from "./components/CreateCourse"
@@ -9,6 +9,8 @@ import UserSignIn from "./components/UserSignIn";
 import UserSignOut from "./components/UserSignOut";
 import UserSignUp from "./components/UserSignUp";
 import NotFound from "./components/NotFound";
+import UnhandledError from "./components/UnhandledError";
+import Forbidden from "./components/Forbidden";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
@@ -25,6 +27,9 @@ function App() {
         <Route path="signin" element={<UserSignIn />}></Route>
         <Route path="signup" element={<UserSignUp />}></Route>
         <Route path="signout" element={<UserSignOut />}></Route>
+        <Route path="forbidden" element={<Forbidden />}></Route>
+        <Route path="error" element={<UnhandledError />}></Route>
+        <Route path="notfound" element={<NotFound />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
 

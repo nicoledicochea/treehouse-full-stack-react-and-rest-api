@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import "../reset.css"
 import "../global.css"
@@ -9,7 +9,7 @@ import Markdown from "react-markdown";
 const CourseDetail = () => {
     const [course, setCourse] = useState([])
     const { authUser } = useContext(UserContext)
-
+    const navigate = useNavigate();
     const { id } = useParams();
 
     const url = `http://localhost:5000/api/courses/${id}`;
@@ -20,9 +20,14 @@ const CourseDetail = () => {
             setCourse(response.data)
         })
         .catch((error) => {
+            if(error.response.status === 404) {
+                navigate('/notfound')
+            } else {
+                navigate('/error')
+            }
             console.log(`Error fetching and parsing data: ${error}`)
         })
-    }, [url])
+    }, [url, navigate])
 
     const handleDelete = () => {
         axios({
@@ -41,7 +46,7 @@ const CourseDetail = () => {
         <main>
             <div className="actions--bar">
                 <div className="wrap">
-                    {authUser && course.user && authUser.id == course.user.id ? <>
+                    {authUser && course.user && authUser.id === course.user.id ? <>
                         <Link className="button" to={`/courses/${id}/update`}>Update Course</Link> 
                         <Link onClick={handleDelete} className="button" to="/">Delete Course</Link>
                     </> : null}
