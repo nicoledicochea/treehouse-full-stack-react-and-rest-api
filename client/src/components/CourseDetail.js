@@ -25,8 +25,14 @@ const CourseDetail = () => {
     }, [url])
 
     const handleDelete = () => {
-        axios
-        .delete(url)
+        axios({
+            method: "DELETE",
+            url,
+            auth: {
+                username: authUser.emailAddress,
+                password: authUser.password
+            },
+        })
         .then(response => console.log("Course successfully deleted"))
         .catch(error => console.error(error))
     }
