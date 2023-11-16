@@ -33,23 +33,29 @@ const CreateCourse = () => {
         if(description !== '') {
             newCourse.description = description
         }
+        console.log(newCourse)
         axios({
             method: "POST",
             url,
             data: JSON.stringify(newCourse),
+            headers: {"Content-Type": "application/json"},
             // TODO - update with basic auth
             auth: {
                 username: authUser.emailAddress,
-                password: authUser.password
-            }
+                password: "password"
+            },
+            // headers: {
+            //     Authorization: `Basic ${authCredentials}`
+            // }
             })
             .then(response => {
                 if(response.status === 201) {
                     navigate(`/`)
-                } console.log(authUser)
+                }
             })
             .catch(error => {
                 const validationErrors = error.response.data.errors
+                console.log(error.response.data.message)
                 setErrors(validationErrors)
             })
         
@@ -65,7 +71,7 @@ const CreateCourse = () => {
         <main>
         <div className="wrap">
             <h2>Create Course</h2>
-            {/* { errors.length > 0 
+            { errors.length > 0 
             ? 
             <div className="validation--errors" >
                 <h3>Validation Errors</h3>
@@ -75,7 +81,7 @@ const CreateCourse = () => {
                     })}
                 </ul> 
             </div>
-            : null } */}
+            : null }
             <form onSubmit={e => handleSubmit(e)}>
                 <div className="main--flex">
                     <div>
@@ -84,7 +90,7 @@ const CreateCourse = () => {
                         onChange={e => setTitle(e.target.value)} /></label>
 
                         {/* auth user */}
-                        { authUser ?  <p>By {authUser.firstName + authUser.lastName}</p> : null }
+                        { authUser ?  <p>By {authUser.firstName + " " + authUser.lastName}</p> : null }
                        
 
                         <label>Course Description
