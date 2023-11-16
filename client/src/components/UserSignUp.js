@@ -4,7 +4,6 @@ import axios from "axios";
 import UserContext from "../context/UserContext"
 import "../reset.css";
 import "../global.css";
-import Cookies from "js-cookie";
 
 const UserSignUp = () => {
   const navigate = useNavigate();
@@ -33,7 +32,12 @@ const UserSignUp = () => {
         })
         .then(async(response) => {
             if(response.status === 201) {
-                await actions.signIn(user)
+              const credentials = {
+                username: user.emailAddress,
+                password: user.password,
+              };
+                await actions.signIn(credentials)
+                navigate('/')
             } 
         })
     } catch (error) {
