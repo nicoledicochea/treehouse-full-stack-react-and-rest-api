@@ -1,6 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useRef, useContext } from "react";
-import axios from "axios";
 import UserContext from "../context/UserContext";
 import "../reset.css";
 import "../global.css";
@@ -11,9 +10,14 @@ const UserSignIn = () => {
   const password = useRef(null);
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let from = "/"
+    if(location.state) {
+      from = location.state.from
+    }
     const credentials = {
       username: username.current.value,
       password: password.current.value,
@@ -21,7 +25,7 @@ const UserSignIn = () => {
     try {
       const user = await actions.signIn(credentials);
       if(user) {
-        navigate('/')
+        navigate(from)
       } else {
         setErrors(["Sign in was unsuccessful"])
       }
