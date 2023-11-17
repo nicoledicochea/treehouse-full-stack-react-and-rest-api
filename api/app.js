@@ -70,7 +70,7 @@ app.set("port", process.env.PORT || 5000);
 
 // sequelize model sync
 // start listening on our port
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
   const server = app.listen(app.get("port"), () => {
     console.log(`Express server is listening on port ${server.address().port}`);
   });
