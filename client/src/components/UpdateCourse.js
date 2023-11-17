@@ -34,11 +34,16 @@ const UpdateCourse = () => {
         }
         // only allow the authUser that created the course to update it
         // redirects other authorized users to forbidden
-        else if (course.user.id !== authUser.id) {
+        if (course.user.id !== authUser.id) {
           navigate("/forbidden");
         }
       })
       .catch((error) => {
+        if(error.response.status === 404) {
+          navigate('/notFound')
+        } else if (error.response.status === 500) {
+          navigate("/error");
+        }
         console.log(`Error fetching and parsing data: ${error}`);
       });
   }, [url, navigate, authUser.id]);
